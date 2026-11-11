@@ -1,0 +1,1 @@
+{% extends "base.html" %}{% block content %}<div class="card" style="max-width:600px;margin:auto"><h1>Monthly budget</h1><p class="muted">Set your budget for {{ month_name }}.</p><form method="post">{% csrf_token %}{{ form.as_p }}<button class="btn">Save budget</button> <a class="btn secondary" href="{% url 'dashboard' %}">Cancel</a></form></div>{% endblock %}

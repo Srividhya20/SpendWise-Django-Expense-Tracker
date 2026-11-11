@@ -1,0 +1,69 @@
+
+{% extends "base.html" %}
+
+{% block title %}My Profile | SpendWise{% endblock %}
+
+{% block content %}
+
+<div style="max-width:600px; margin:40px auto;">
+    <div class="card" style="padding:30px;">
+
+        <h1>My Profile 👤</h1>
+
+        <p class="muted">
+            View your SpendWise account information.
+        </p>
+
+        <hr>
+
+        <div style="margin-top:25px;">
+            <p class="muted">Username</p>
+            <h3>{{ user.username }}</h3>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div style="margin-top:25px;">
+                <label>Email Address</label>
+
+                <input
+                    type="email"
+                    name="email"
+                    value="{{ user.email }}"
+                    class="form-control"
+                    style="width:100%; box-sizing:border-box; padding:14px; border:1px solid #ddd; border-radius:8px; margin-top:10px;"
+                >
+
+                {% if form.email.errors %}
+                    <p style="color:red;">
+                        {{ form.email.errors }}
+                    </p>
+                {% endif %}
+            </div>
+
+            <button type="submit" class="btn" style="margin-top:20px;">
+                Save Changes
+            </button>
+            <a href="{% url 'change_password' %}"
+   class="btn secondary"
+   style="margin-top:15px;">
+    Change Password
+</a>
+        </form>
+
+        <div style="margin-top:25px;">
+            <p class="muted">Account Created</p>
+            <h3>{{ user.date_joined|date:"d M Y" }}</h3>
+        </div>
+
+        <hr>
+
+        <a href="{% url 'dashboard' %}" class="btn">
+            Back to Dashboard
+        </a>
+
+    </div>
+</div>
+
+{% endblock %}

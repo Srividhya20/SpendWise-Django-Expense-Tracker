@@ -1,0 +1,146 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <h1>My Expenses</h1>
+    <p>Search and manage your transactions.</p>
+
+    <a href="{% url 'expense_create' %}" class="btn btn-primary">
+        + Add Expense
+    </a>
+    <a href="{% url 'export_expenses' %}" class="btn btn-success">
+    Download CSV
+</a>
+
+    <!-- Search and Filter Form -->
+   
+<form method="GET" style="margin:25px 0; display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+
+    <!-- Search by title -->
+    <input
+        type="text"
+        name="search"
+        placeholder="Search expense..."
+        value="{{ search }}"
+    >
+
+    <!-- Category filter -->
+    <select name="category">
+        <option value="">All Categories</option>
+
+        {% for category in categories %}
+            <option value="{{ category.id }}"
+                {% if selected_category == category.id|stringformat:"s" %}
+                    selected
+                {% endif %}>
+                {{ category.name }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <!-- Minimum amount -->
+    <input
+        type="number"
+        name="min_amount"
+        placeholder="Min amount"
+        value="{{ min_amount }}"
+        min="0"
+        step="0.01"
+    >
+
+    <!-- Maximum amount -->
+    <input
+        type="number"
+        name="max_amount"
+        placeholder="Max amount"
+        value="{{ max_amount }}"
+        min="0"
+        step="0.01"
+    >
+
+    <!-- Start date -->
+    <input
+        type="date"
+        name="start_date"
+        value="{{ start_date }}"
+    >
+
+    <!-- End date -->
+    <input
+        type="date"
+        name="end_date"
+        value="{{ end_date }}"
+    >
+
+    <button type="submit" class="btn">
+        Apply Filters
+    </button>
+
+    <a href="{% url 'expense_list' %}" class="btn secondary">
+        Clear Filters
+    </a>
+
+</form>
+
+
+    <!-- Expense Table -->
+    <table width="100%" cellpadding="12">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Amount</th>
+                <th>Category</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for expense in expenses %}
+                <tr>
+                    <td>{{ expense.title }}</td>
+                    <td>₹{{ expense.amount }}</td>
+                    <td>{{ expense.category.name }}</td>
+                    <td>{{ expense.date }}</td>
+                    <td>
+                        <a href="{% url 'expense_edit' expense.pk %}">Edit</a>
+                        |
+                        <a href="{% url 'expense_delete' expense.pk %}">Delete</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5">No expenses found.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+<!-- Pagination -->
+
+<div style="display:flex; justify-content:center; align-items:center; gap:15px; margin:30px 0;">
+
+    {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}&search={{ search|urlencode }}&category={{ selected_category|urlencode }}&min_amount={{ min_amount|urlencode }}&max_amount={{ max_amount|urlencode }}&start_date={{ start_date|urlencode }}&end_date={{ end_date|urlencode }}">
+            Previous
+        </a>
+    {% endif %}
+
+    <span>
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+    </span>
+
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}&search={{ search|urlencode }}&category={{ selected_category|urlencode }}&min_amount={{ min_amount|urlencode }}&max_amount={{ max_amount|urlencode }}&start_date={{ start_date|urlencode }}&end_date={{ end_date|urlencode }}">
+            Next
+        </a>
+    {% endif %}
+
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,33 @@
+
+{% extends "base.html" %}
+
+{% block title %}Create Account | SpendWise{% endblock %}
+
+{% block content %}
+
+<div class="card auth-card">
+
+    <h1>Create your account</h1>
+
+    <p class="muted">
+        Start managing your money smarter with SpendWise.
+    </p>
+
+    <form method="post">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit" class="btn">
+            Create Account
+        </button>
+    </form>
+
+    <div class="auth-footer">
+        Already have an account?
+        <a href="{% url 'login' %}">Sign in</a>
+    </div>
+
+</div>
+
+{% endblock %}

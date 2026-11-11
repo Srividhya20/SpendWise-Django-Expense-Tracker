@@ -1,0 +1,1 @@
+{% extends "base.html" %}{% block content %}<div class="card" style="max-width:620px;margin:auto"><h1>{{ heading }}</h1><form method="post">{% csrf_token %}{{ form.as_p }}<button class="btn">Save expense</button> <a class="btn secondary" href="{% url 'expense_list' %}">Cancel</a></form></div>{% endblock %}
